@@ -42,26 +42,17 @@ export function getUrlQuery(name, locationSearch) {
 
 // 💚 Calculation
 function constructItems(cartItems) {
-  const { edges } = cartItems.data.productVariants;
-  return edges;
+  return cartItems.data.productVariants.edges;
 }
 
 // 💚 Calculation
 function productsVariantIdOfCart(cart) {
-  const products = cart.products.map((p) => ({
-    id: p.id,
-    quantity: p.quantity,
-  }));
-  const productsVariantId = products.map((p) => p.id);
-  return productsVariantId;
+  return cart.products.map((p) => p.id);
 }
 
 // 💚 Calculation
 function cartTotalPrice(items) {
-  const totalPriceOfCart = items
-    .map((p) => p.price.total)
-    .reduce((a, b) => a + b, 0);
-  return totalPriceOfCart;
+  return items.reduce((item, total) => item.price.total + total, 0);
 }
 
 // 💚 Calculation
