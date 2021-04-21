@@ -1,7 +1,10 @@
 const HOST = "http://localhost";
 const SALEOR_HOST = "https://saleor-host";
 const SHIPPING_PRICE_DEFAULT = "100.00";
-const countries_ = [{ name: "Thailand", code: "th" }];
+const countries_ = [
+  { name: "Thailand", code: "th" },
+  { name: "England", code: "en" },
+];
 // Mocked Elm app object
 const app = {
   ports: {
