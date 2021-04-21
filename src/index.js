@@ -11,7 +11,7 @@ const app = {
 
 // 🅰️ Action
 async function main() {
-  const cartId = getUrlQuery("cart_id"); // 🅰️ Action
+  const cartId = getUrlQuery("cart_id", location.search);
   const cart = await fetchCart(HOST, cartId); // 🅰️ Action
   const items = await constructItems(cart, SALEOR_HOST); // 🅰️ Action
   const totalPriceOfCart = items
@@ -39,11 +39,12 @@ async function main() {
   }, 1500);
 }
 
-// 🅰️ Action
-function getUrlQuery(name) {
+// 💚 Calculation
+// Make locationSearch a function argument
+export function getUrlQuery(name, locationSearch) {
   const name_ = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
   const regex = new RegExp("[\\?&]" + name_ + "=([^&#]*)");
-  const results = regex.exec(location.search); // 🅰️ input: location.search
+  const results = regex.exec(locationSearch);
 
   if (results === null) {
     throw new Error("invalid-url");
