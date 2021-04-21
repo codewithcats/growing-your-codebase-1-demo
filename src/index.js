@@ -13,7 +13,13 @@ const app = {
 async function main() {
   const cartId = getUrlQuery("cart_id", location.search);
   const cart = await fetchCart(HOST, cartId); // 🅰️ Action
-  const items = await constructItems(cart, SALEOR_HOST); // 🅰️ Action
+  const products = cart.products.map((p) => ({
+    id: p.id,
+    quantity: p.quantity,
+  }));
+  const productsVariantId = products.map((p) => p.id);
+  const cartItems = await fetchCartItems(SALEOR_HOST, productsVariantId); // 🅰️ Action
+  const items = await constructItems(cart, cartItems); // 🅰️ Action
   const totalPriceOfCart = items
     .map((p) => p.price.total)
     .reduce((a, b) => a + b, 0);
@@ -53,17 +59,11 @@ export function getUrlQuery(name, locationSearch) {
   }
 }
 
-// 🅰️ Action
-async function constructItems(cart, saleorHost) {
-  const products = cart.products.map((p) => ({
-    id: p.id,
-    quantity: p.quantity,
-  }));
-  const productsVariantId = products.map((p) => p.id);
-  // 🅰️ input: network request
-  const cartItems = await fetchCartItems(saleorHost, productsVariantId);
+// 💚 Calculation
+// Receive cartItems as an argument
+function constructItems(cartItems) {
+  // Move fetch cart items out
   const { edges } = cartItems.data.productVariants;
-
   return edges;
 }
 
