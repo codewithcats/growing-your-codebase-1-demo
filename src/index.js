@@ -9,10 +9,11 @@ const app = {
   },
 };
 
+// 🅰️ Action
 async function main() {
-  const cartId = getUrlQuery("cart_id");
-  const cart = await fetchCart(HOST, cartId);
-  const items = await constructItems(cart, SALEOR_HOST);
+  const cartId = getUrlQuery("cart_id"); // 🅰️ Action
+  const cart = await fetchCart(HOST, cartId); // 🅰️ Action
+  const items = await constructItems(cart, SALEOR_HOST); // 🅰️ Action
   const totalPriceOfCart = items
     .map((p) => p.price.total)
     .reduce((a, b) => a + b, 0);
@@ -34,14 +35,15 @@ async function main() {
   };
 
   setTimeout(() => {
-    app.ports.pages_shipping_fetchReceived.send(toElm);
+    app.ports.pages_shipping_fetchReceived.send(toElm); // 🅰️ Action
   }, 1500);
 }
 
+// 🅰️ Action
 function getUrlQuery(name) {
   const name_ = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
   const regex = new RegExp("[\\?&]" + name_ + "=([^&#]*)");
-  const results = regex.exec(location.search);
+  const results = regex.exec(location.search); // 🅰️ input: location.search
 
   if (results === null) {
     throw new Error("invalid-url");
@@ -50,12 +52,14 @@ function getUrlQuery(name) {
   }
 }
 
+// 🅰️ Action
 async function constructItems(cart, saleorHost) {
   const products = cart.products.map((p) => ({
     id: p.id,
     quantity: p.quantity,
   }));
   const productsVariantId = products.map((p) => p.id);
+  // 🅰️ input: network request
   const cartItems = await fetchCartItems(saleorHost, productsVariantId);
   const { edges } = cartItems.data.productVariants;
 
@@ -63,5 +67,7 @@ async function constructItems(cart, saleorHost) {
 }
 
 // Faked network functions
+// 🅰️ Action
 async function fetchCart(host, cartId) {}
+// 🅰️ Action
 async function fetchCartItems(saleorHost, productsVariantId) {}
